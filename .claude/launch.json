@@ -4,7 +4,7 @@
     {
       "name": "landing",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "serve", "-l", "4173", "/Users/riaan/Desktop/PoppyLanding"],
+      "runtimeArgs": ["--yes", "serve", "-l", "4173", "C:/Users/dilan/PoppyLanding"],
       "port": 4173
     }
   ]

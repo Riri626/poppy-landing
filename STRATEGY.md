@@ -32,13 +32,22 @@ explanation comes after the emotional hook.
 - **Offer display** — price anchoring, per-day framing, guarantee, single unmissable plan card
 
 ## Design (the "not AI-built" part)
-- Warm paper palette + poppy-red accent (on-brand, nobody else will have it —
-  every AI page is purple-gradient-on-dark)
+- Warm paper palette + Poppy-pink accent pulled from the real mascot logo
+  (`poppy-logo.png`, their actual app icon, used in nav/favicon/chat head)
 - Fraunces serif display + Inter body — editorial, not template
-- Hand-built CSS mockup of the actual canvas UI: video/PDF/voice nodes, dashed
-  connectors, animated multiplayer cursors, typing AI bubble
-- Slight card rotations, marker-highlight `<mark>`s, offset hard shadow on the
-  price card — deliberate human touches
+- Slight card rotations, marker-highlight `<mark>`s, animated gradient ring on
+  the price card — deliberate human touches
+
+## Interactive proof (what beats the current leaderboard #1)
+- The hero canvas is a *playable* mini-demo: tap source chips (YouTube / PDF /
+  Voice / Reel) to drop nodes on the board, hit Generate and watch Poppy type
+  hooks referencing exactly the sources you added. Auto-plays once for
+  visitors who just watch; user interaction takes over cleanly.
+- Real video testimonials (Pat Flynn, Kevin $75k, Travis $160k/mo, Flagrant
+  1.5M views) pulled from Poppy's official YouTube — thumbnail facades, zero
+  page-weight until clicked, then play in a lightbox (`youtube-nocookie`).
+- Founder section + hero "Watch the demo" open real Poppy videos in the same
+  lightbox. One iframe total, loaded on demand — page stays fast.
 
 ## Before submitting
 - Point every CTA `href="#pricing"` at the real checkout URL

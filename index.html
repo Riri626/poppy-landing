@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Poppy AI: The AI whiteboard where viral content gets made</title>
 <meta name="description" content="Drop in YouTube videos, PDFs and voice notes. Poppy connects ChatGPT & Claude to all of it on one visual canvas. 11,000+ creators write scripts, ads and emails in minutes.">
+<meta name="theme-color" content="#faf6ef">
+<link rel="icon" type="image/png" href="poppy-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -32,9 +34,7 @@
 <header class="nav">
   <div class="nav-inner">
     <a class="logo" href="#top" aria-label="Poppy AI">
-      <span class="logo-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="5.5" fill="var(--red)"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.9 2.9M16.2 16.2l2.9 2.9M19.1 4.9l-2.9 2.9M7.8 16.2l-2.9 2.9" stroke="var(--red)" stroke-width="1.8" stroke-linecap="round"/></svg>
-      </span>
+      <img class="logo-img" src="poppy-logo.png" alt="" width="30" height="30">
       poppy
     </a>
     <nav class="nav-links">
@@ -60,48 +60,67 @@
         <button type="submit" class="btn btn-lg">Start creating with Poppy</button>
       </form>
       <p class="cta-note">30-day money-back guarantee · Instant access</p>
-      <a class="tp-badge" href="https://www.trustpilot.com/review/getpoppy.ai" target="_blank" rel="noopener">
-        <span class="tp-star" aria-hidden="true">
-          <svg viewBox="0 0 20 20" width="15" height="15"><path d="M10 1l2.4 5.6 6 .5-4.6 4 1.4 5.9L10 13.8 4.8 17l1.4-5.9-4.6-4 6-.5z" fill="#fff"/></svg>
-        </span>
-        <strong>Trustpilot</strong>
-        <span class="tp-meta">4.8 &nbsp;·&nbsp; 355+ reviews</span>
-      </a>
+      <div class="hero-proof">
+        <a class="tp-badge" href="https://www.trustpilot.com/review/getpoppy.ai" target="_blank" rel="noopener">
+          <span class="tp-star" aria-hidden="true">
+            <svg viewBox="0 0 20 20" width="15" height="15"><path d="M10 1l2.4 5.6 6 .5-4.6 4 1.4 5.9L10 13.8 4.8 17l1.4-5.9-4.6-4 6-.5z" fill="#fff"/></svg>
+          </span>
+          <strong>Trustpilot</strong>
+          <span class="tp-meta">4.8 &nbsp;·&nbsp; 355+ reviews</span>
+        </a>
+        <button class="demo-link" type="button" data-yt="13qfbeze2qs">
+          <span class="demo-link-btn" aria-hidden="true"><svg viewBox="0 0 24 24" width="13" height="13"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+          Watch the demo
+        </button>
+      </div>
     </div>
 
-    <!-- Canvas mockup -->
-    <div class="hero-visual" aria-hidden="true">
-      <div class="canvas">
-        <svg class="canvas-lines" viewBox="0 0 460 420" preserveAspectRatio="none">
-          <path d="M150 88 C 210 100, 210 150, 248 168" fill="none"/>
-          <path d="M120 240 C 180 240, 200 210, 244 196" fill="none"/>
-          <path d="M132 340 C 200 340, 220 250, 250 214" fill="none"/>
+    <!-- Interactive canvas: tap sources, watch Poppy write -->
+    <div class="hero-visual">
+      <div class="canvas" id="demo-board">
+        <div class="board-toolbar">
+          <span class="board-hint">This board is live — tap a source:</span>
+          <div class="chip-row" role="group" aria-label="Add sources to the demo board">
+            <button class="chip" type="button" data-node="video">▶ YouTube</button>
+            <button class="chip" type="button" data-node="pdf">PDF</button>
+            <button class="chip" type="button" data-node="voice">🎙 Voice</button>
+            <button class="chip" type="button" data-node="reel">📱 Reel</button>
+          </div>
+        </div>
+        <svg class="canvas-lines" viewBox="0 0 460 460" preserveAspectRatio="none" aria-hidden="true">
+          <path data-line="video" d="M172 104 C 205 118, 210 142, 236 152" fill="none"/>
+          <path data-line="pdf" d="M168 228 C 200 228, 212 198, 236 184" fill="none"/>
+          <path data-line="voice" d="M172 332 C 210 322, 222 262, 238 228" fill="none"/>
+          <path data-line="reel" d="M272 352 C 292 338, 308 330, 324 318" fill="none"/>
         </svg>
-        <div class="node node-video">
+        <div class="node node-video" data-slot="video" aria-hidden="true">
           <div class="node-tag">▶ YouTube</div>
           <div class="thumb"></div>
           <p>“How I hit 1M subs”, 42 min</p>
         </div>
-        <div class="node node-pdf">
+        <div class="node node-pdf" data-slot="pdf" aria-hidden="true">
           <div class="node-tag tag-pdf">PDF</div>
           <p>competitor-teardown.pdf<br><span>38 pages, summarized</span></p>
         </div>
-        <div class="node node-voice">
+        <div class="node node-voice" data-slot="voice" aria-hidden="true">
           <div class="node-tag tag-voice">🎙 Voice note</div>
           <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         </div>
-        <div class="node node-chat">
-          <div class="chat-head"><span class="dot"></span>Claude + GPT see everything on this board</div>
-          <div class="chat-bubble user">Write me 5 hooks in my voice, using the video + PDF</div>
-          <div class="chat-bubble ai"><span class="typing">Done. Hook #3 matches your best-performing reel…</span></div>
+        <div class="node node-reel" data-slot="reel" aria-hidden="true">
+          <div class="node-tag tag-reel">📱 IG Reel</div>
+          <p>Your best reel · 812k plays</p>
         </div>
-        <div class="cursor cursor-a"><svg viewBox="0 0 20 20" width="14" height="14"><path d="M2 1l6 16 2.5-6.5L17 8z" fill="var(--blue)"/></svg><span>Sam</span></div>
-        <div class="cursor cursor-b"><svg viewBox="0 0 20 20" width="14" height="14"><path d="M2 1l6 16 2.5-6.5L17 8z" fill="var(--red)"/></svg><span>You</span></div>
-        <!-- Demo video overlay: swap href for the real 90-sec demo when ready -->
-        <a class="demo-play" href="https://www.getpoppy.ai" target="_blank" rel="noopener" aria-label="Watch the 90-second Poppy demo">
-          <span class="demo-play-btn"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
-          <span class="demo-play-label">Watch the 90-sec demo</span>
-        </a>
+        <div class="node node-chat">
+          <div class="chat-head">
+            <img src="poppy-logo.png" width="18" height="18" alt="">
+            Poppy sees everything on this board
+          </div>
+          <div class="chat-bubble user">Write me 5 hooks in my voice from what’s on this board</div>
+          <div class="chat-bubble ai" id="ai-out" hidden><span class="typing-text" id="ai-text"></span></div>
+          <button class="gen-btn" id="gen-btn" type="button">✦ Generate 5 hooks</button>
+        </div>
+        <div class="cursor cursor-a" aria-hidden="true"><svg viewBox="0 0 20 20" width="14" height="14"><path d="M2 1l6 16 2.5-6.5L17 8z" fill="#2547f4"/></svg><span>Sam</span></div>
+        <div class="cursor cursor-b" aria-hidden="true"><svg viewBox="0 0 20 20" width="14" height="14"><path d="M2 1l6 16 2.5-6.5L17 8z" fill="#d95c8a"/></svg><span>You</span></div>
       </div>
     </div>
   </div>
@@ -137,7 +156,7 @@
     <div class="stat"><strong>11,000+</strong><span>paying customers</span></div>
     <div class="stat"><strong>355+</strong><span>Trustpilot reviews</span></div>
     <div class="stat"><strong>100+ hrs</strong><span>saved every month</span></div>
-    <div class="stat"><strong>$500k</strong><span>monthly revenue &amp; growing</span></div>
+    <div class="stat"><strong>$744</strong><span>in tools replaced · yours for $400/yr</span></div>
   </div>
 </section>
 
@@ -271,7 +290,58 @@
   <div class="wrap">
     <p class="sec-tag">05 · Receipts</p>
     <h2 class="section-title">Don’t take our word for it. Take theirs.</h2>
-    <p class="section-sub">Real customers, real numbers. Thousands of recorded case studies behind these.</p>
+    <p class="section-sub">Real customers, on camera, with real numbers. Press play.</p>
+
+    <!-- Video testimonials: real footage, loads only on click -->
+    <div class="vt-grid">
+      <div class="vt-card vt-live">
+        <div class="vt-thumb av-slot" data-autoplay="V5ych2rxtnQ">
+          <img src="https://i.ytimg.com/vi/V5ych2rxtnQ/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/V5ych2rxtnQ/hqdefault.jpg'" loading="lazy" alt="Pat Flynn reviews Poppy AI">
+          <span class="vt-playbtn" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+          <div class="av-wrap" hidden>
+            <div class="av-ctrl">
+              <button class="av-mute" type="button" aria-label="Unmute video"></button>
+              <button class="av-close" type="button" aria-label="Close video">&times;</button>
+            </div>
+          </div>
+        </div>
+        <div class="vt-meta">
+          <strong>“Literally the ONLY AI tool creators need right now”</strong>
+          <span>Pat Flynn · independent review</span>
+        </div>
+      </div>
+      <button class="vt-card" type="button" data-yt="cRmoR5TVHv8">
+        <span class="vt-thumb">
+          <img src="https://i.ytimg.com/vi/cRmoR5TVHv8/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/cRmoR5TVHv8/hqdefault.jpg'" loading="lazy" alt="How Kevin made $75,000 with Poppy AI">
+          <span class="vt-playbtn" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        </span>
+        <span class="vt-meta">
+          <strong>How Kevin closed $75,000 with Poppy</strong>
+          <span>Kevin · Founder, Levrg AI</span>
+        </span>
+      </button>
+      <button class="vt-card" type="button" data-yt="7y8z7bboFV4">
+        <span class="vt-thumb">
+          <img src="https://i.ytimg.com/vi/7y8z7bboFV4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/7y8z7bboFV4/hqdefault.jpg'" loading="lazy" alt="The Poppy AI workflow generating $160K monthly">
+          <span class="vt-playbtn" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        </span>
+        <span class="vt-meta">
+          <strong>The exact workflow generating $160K/month</strong>
+          <span>Travis Stephenson · @thetravisstephenson</span>
+        </span>
+      </button>
+      <button class="vt-card" type="button" data-yt="B8xH_-q-t3g">
+        <span class="vt-thumb">
+          <img src="https://i.ytimg.com/vi/B8xH_-q-t3g/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/B8xH_-q-t3g/hqdefault.jpg'" loading="lazy" alt="How the Flagrant podcast got 1.5M views in 48 hours using Poppy AI">
+          <span class="vt-playbtn" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        </span>
+        <span class="vt-meta">
+          <strong>How Flagrant got 1.5M+ views in 48 hours</strong>
+          <span>Clips cut &amp; scripted on a Poppy board</span>
+        </span>
+      </button>
+    </div>
+
     <div class="masonry">
       <figure class="t-card">
         <blockquote>“The first day we used Poppy, we closed a <mark>$75,000 deal</mark>.”</blockquote>
@@ -308,13 +378,19 @@
 <!-- ============ FOUNDER ============ -->
 <section class="founder">
   <div class="wrap founder-grid">
-    <a class="founder-video" href="https://www.getpoppy.ai" target="_blank" rel="noopener" aria-label="Watch a note from Qazi, co-founder of Poppy AI">
-      <!-- Swap this frame for the real video embed (YouTube iframe or mp4) when the asset is ready -->
+    <div class="founder-video av-slot" data-autoplay="1EnkaMBquDo" role="button" tabindex="0" aria-label="Watch a note from Qazi, co-founder of Poppy AI">
+      <img class="founder-poster" src="https://i.ytimg.com/vi/1EnkaMBquDo/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/1EnkaMBquDo/hqdefault.jpg'" loading="lazy" alt="">
       <span class="play-btn" aria-hidden="true">
         <svg viewBox="0 0 24 24" width="30" height="30"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
       </span>
-      <span class="founder-video-tag">Watch · 1 min</span>
-    </a>
+      <span class="founder-video-tag">Watch · 3 min</span>
+      <div class="av-wrap" hidden>
+        <div class="av-ctrl">
+          <button class="av-mute" type="button" aria-label="Unmute video"></button>
+          <button class="av-close" type="button" aria-label="Close video">&times;</button>
+        </div>
+      </div>
+    </div>
     <div class="founder-copy">
       <p class="eyebrow">A note from the co-founder</p>
       <blockquote>“We built Poppy because our own content team was drowning in tabs. Now 11,000+ creators use it every day. We move fast, and the product gets better every single week.”</blockquote>
@@ -387,7 +463,7 @@
   <div class="wrap wrap-narrow">
     <h2>Every day you research the slow way is a post that never went out.</h2>
     <p>Join 11,000+ creators, marketers and founders who stopped copy-pasting and started shipping.</p>
-    <a class="btn btn-lg btn-invert checkout-link" href="https://courses.cleverprogrammer.com/poppy-ai-checkout">Start creating with Poppy</a>
+    <a class="btn btn-lg checkout-link" href="https://courses.cleverprogrammer.com/poppy-ai-checkout">Start creating with Poppy</a>
     <p class="final-fine">$400/year · 30-day money-back guarantee</p>
   </div>
 </section>
@@ -400,8 +476,8 @@
       <span class="footer-contact">support@getpoppy.ai</span>
     </div>
     <nav class="footer-links" aria-label="Footer">
-      <a href="https://www.getpoppy.ai" target="_blank" rel="noopener">Terms of Use</a>
-      <a href="https://www.getpoppy.ai" target="_blank" rel="noopener">Privacy Policy</a>
+      <a href="terms.html">Terms of Use</a>
+      <a href="privacy.html">Privacy Policy</a>
       <a href="https://www.trustpilot.com/review/getpoppy.ai" target="_blank" rel="noopener">Reviews</a>
     </nav>
     <div class="footer-social">
@@ -418,6 +494,17 @@
 <div class="sticky-cta">
   <div><strong>Poppy AI</strong><span>$400/yr · 30-day guarantee</span></div>
   <a class="btn checkout-link" href="https://courses.cleverprogrammer.com/poppy-ai-checkout">Get Poppy</a>
+</div>
+
+<!-- Video lightbox: one iframe for every video on the page, loads only on demand -->
+<div class="video-modal" id="video-modal" hidden>
+  <div class="vm-backdrop" data-close></div>
+  <div class="vm-frame" role="dialog" aria-modal="true" aria-label="Video player">
+    <button class="vm-close" type="button" data-close aria-label="Close video">&times;</button>
+    <div class="vm-embed">
+      <iframe id="vm-iframe" title="Poppy AI video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
 </div>
 
 <script src="script.js" defer></script>

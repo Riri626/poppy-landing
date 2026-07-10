@@ -1,3 +1,236 @@
+// ============ Interactive demo board ============
+// Tap source chips to drop nodes on the board, then Generate to watch
+// Poppy "write". If untouched, an auto-demo plays the sequence once.
+(() => {
+  const board = document.getElementById('demo-board');
+  if (!board) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const chips = [...board.querySelectorAll('.chip')];
+  const genBtn = document.getElementById('gen-btn');
+  const aiOut = document.getElementById('ai-out');
+  const aiText = document.getElementById('ai-text');
+
+  const PARTS = {
+    video: 'watched all 42 min of the video',
+    pdf: 'read every page of the teardown',
+    voice: 'matched the tone of your voice note',
+    reel: 'studied your best reel’s cadence',
+  };
+  const HOOK =
+    'Hook #1: “I studied my competitor’s most viral content so you don’t have to — three beats make it work, and you can steal all of them.”';
+  const EMPTY_MSG =
+    'This board is empty. Tap a source above — I write better with receipts.';
+
+  const active = new Set();
+  let autoTimers = [];
+  let typeTimer = null;
+  let userDrove = false;
+
+  const setNode = (key, on) => {
+    const node = board.querySelector(`.node[data-slot="${key}"]`);
+    const line = board.querySelector(`path[data-line="${key}"]`);
+    const chip = board.querySelector(`.chip[data-node="${key}"]`);
+    if (node) node.classList.toggle('on', on);
+    if (line) line.classList.toggle('on', on);
+    if (chip) chip.classList.toggle('on', on);
+    active[on ? 'add' : 'delete'](key);
+  };
+
+  const stopTyping = () => {
+    if (typeTimer) { clearInterval(typeTimer); typeTimer = null; }
+    aiText.classList.remove('typing-caret');
+  };
+
+  const typeOut = (msg, done) => {
+    stopTyping();
+    aiOut.hidden = false;
+    if (reduced) { aiText.textContent = msg; if (done) done(); return; }
+    aiText.textContent = '';
+    aiText.classList.add('typing-caret');
+    let i = 0;
+    typeTimer = setInterval(() => {
+      aiText.textContent = msg.slice(0, ++i);
+      if (i >= msg.length) { stopTyping(); if (done) done(); }
+    }, 13);
+  };
+
+  const generate = () => {
+    if (!active.size) { typeOut(EMPTY_MSG); return; }
+    const order = ['video', 'pdf', 'voice', 'reel'].filter((k) => active.has(k));
+    const doneList = order.map((k) => PARTS[k]).join(', ');
+    const msg = `Done — ${doneList}.\n${HOOK}\n✓ 5 hooks drafted in your voice · 11s`;
+    typeOut(msg, () => { genBtn.textContent = '↻ Run it again'; });
+  };
+
+  const cancelAuto = () => {
+    if (userDrove) return;
+    userDrove = true;
+    autoTimers.forEach(clearTimeout);
+    autoTimers = [];
+  };
+
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      cancelAuto();
+      const key = chip.dataset.node;
+      setNode(key, !active.has(key));
+    });
+  });
+
+  genBtn.addEventListener('click', () => { cancelAuto(); generate(); });
+
+  // Auto-demo: play the story once for visitors who just watch
+  if (reduced) {
+    ['video', 'pdf', 'voice'].forEach((k) => setNode(k, true));
+    generate();
+  } else {
+    const script = [
+      [600, () => setNode('video', true)],
+      [1500, () => setNode('pdf', true)],
+      [2400, () => setNode('voice', true)],
+      [3400, generate],
+    ];
+    script.forEach(([t, fn]) => autoTimers.push(setTimeout(fn, t)));
+  }
+})();
+
+// ============ Scroll-autoplay video + mini player ============
+// One featured video per section autoplays (muted) when scrolled into view.
+// Scroll past it and it docks to a corner mini player with mute/close.
+// Reaching the other section's video stops this one and starts that one.
+const stopLiveVideo = (() => {
+  const slots = [...document.querySelectorAll('.av-slot[data-autoplay]')];
+  if (!slots.length) return () => {};
+
+  const ICON_MUTED =
+    '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><path d="M16 9.5l5 5m0-5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>';
+  const ICON_SOUND =
+    '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><path d="M16 8a5 5 0 0 1 0 8M18.5 5.5a9 9 0 0 1 0 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>';
+
+  let current = null; // { slot, wrap, iframe, muted }
+
+  const cmd = (iframe, func) => {
+    try {
+      iframe.contentWindow.postMessage(
+        JSON.stringify({ event: 'command', func, args: [] }), '*'
+      );
+    } catch (e) { /* iframe not ready yet */ }
+  };
+
+  const stop = (dismiss) => {
+    if (!current) return;
+    current.iframe.remove();
+    current.wrap.classList.remove('docked');
+    current.wrap.hidden = true;
+    current.slot.classList.remove('playing');
+    if (dismiss) current.slot.dataset.dismissed = '1';
+    current = null;
+  };
+
+  const activate = (slot) => {
+    stop(false);
+    const wrap = slot.querySelector('.av-wrap');
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube-nocookie.com/embed/${slot.dataset.autoplay}?autoplay=1&mute=1&rel=0&playsinline=1&enablejsapi=1`;
+    iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.title = 'Poppy AI video';
+    wrap.prepend(iframe);
+    wrap.hidden = false;
+    slot.classList.add('playing');
+    const muteBtn = wrap.querySelector('.av-mute');
+    muteBtn.innerHTML = ICON_MUTED;
+    muteBtn.setAttribute('aria-label', 'Unmute video');
+    current = { slot, wrap, iframe, muted: true };
+  };
+
+  slots.forEach((slot) => {
+    const wrap = slot.querySelector('.av-wrap');
+    wrap.querySelector('.av-mute').innerHTML = ICON_MUTED;
+
+    wrap.querySelector('.av-close').addEventListener('click', (e) => {
+      e.stopPropagation();
+      stop(true);
+    });
+    wrap.querySelector('.av-mute').addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!current || current.slot !== slot) return;
+      cmd(current.iframe, current.muted ? 'unMute' : 'mute');
+      current.muted = !current.muted;
+      const btn = e.currentTarget;
+      btn.innerHTML = current.muted ? ICON_MUTED : ICON_SOUND;
+      btn.setAttribute('aria-label', current.muted ? 'Unmute video' : 'Mute video');
+    });
+
+    // Tap the thumbnail to (re)start, even after dismissing
+    slot.addEventListener('click', () => {
+      if (current && current.slot === slot) return;
+      delete slot.dataset.dismissed;
+      activate(slot);
+    });
+    slot.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && slot.getAttribute('role') === 'button') {
+        e.preventDefault();
+        slot.click();
+      }
+    });
+  });
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          const slot = en.target;
+          if (en.isIntersecting) {
+            if (current && current.slot === slot) {
+              current.wrap.classList.remove('docked');
+            } else if (!slot.dataset.dismissed) {
+              activate(slot);
+            }
+          } else if (current && current.slot === slot) {
+            current.wrap.classList.add('docked');
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    slots.forEach((s) => io.observe(s));
+  }
+
+  return stop;
+})();
+
+// ============ Video lightbox ============
+// One iframe for every video on the page; nothing loads until a click.
+(() => {
+  const modal = document.getElementById('video-modal');
+  const iframe = document.getElementById('vm-iframe');
+  if (!modal || !iframe) return;
+
+  const open = (id) => {
+    stopLiveVideo(true); // don't fight the lightbox for audio/attention
+    iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  };
+  const close = () => {
+    modal.hidden = true;
+    iframe.src = '';
+    document.body.style.overflow = '';
+  };
+
+  document.querySelectorAll('[data-yt]').forEach((el) => {
+    el.addEventListener('click', () => open(el.dataset.yt));
+  });
+  modal.querySelectorAll('[data-close]').forEach((el) => {
+    el.addEventListener('click', close);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.hidden) close();
+  });
+})();
+
 // ============ Scroll-story background ============
 // Four acts driven by scroll progress:
 // scattered (drifting dots) -> connected (constellation lines) ->
@@ -9,14 +242,14 @@
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const mobile = window.matchMedia('(max-width: 620px)').matches;
 
-  const N = mobile ? 36 : 70;
+  const N = mobile ? 32 : 56;
   const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
   let W, H, cols;
   const parts = [];
   const pulses = [];
 
   const COLORS = [
-    [224, 69, 31],   // poppy red
+    [217, 92, 138],  // poppy pink
     [37, 71, 244],   // blue
     [76, 68, 58],    // warm ink
   ];
@@ -119,8 +352,8 @@
       const x = A.x + (B.x - A.x) * pu.t;
       const y = A.y + (B.y - A.y) * pu.t;
       const g = ctx.createRadialGradient(x, y, 0, x, y, 7);
-      g.addColorStop(0, 'rgba(224,69,31,.75)');
-      g.addColorStop(1, 'rgba(224,69,31,0)');
+      g.addColorStop(0, 'rgba(217,92,138,.7)');
+      g.addColorStop(1, 'rgba(217,92,138,0)');
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(x, y, 7, 0, 7); ctx.fill();
     }
@@ -131,7 +364,7 @@
       if (launch > 0.05) {
         const len = launch * (14 + (i % 5) * 6);
         const lg = ctx.createLinearGradient(pt.x, pt.y, pt.x, pt.y + len);
-        lg.addColorStop(0, `rgba(${r},${g},${b},.4)`);
+        lg.addColorStop(0, `rgba(${r},${g},${b},.35)`);
         lg.addColorStop(1, `rgba(${r},${g},${b},0)`);
         ctx.strokeStyle = lg;
         ctx.lineWidth = 1.4;
@@ -189,7 +422,7 @@ if (tracked.length) {
 
 // Reveal-on-scroll for section content
 const targets = document.querySelectorAll(
-  '.way, .benefit, .step, .use, .t-card'
+  '.way, .benefit, .step, .use, .t-card, .vt-card'
 );
 targets.forEach((el, i) => {
   el.classList.add('reveal');
@@ -230,7 +463,7 @@ const pulseIO = new IntersectionObserver(
   },
   { threshold: 0.6 }
 );
-document.querySelectorAll('.btn-lg').forEach((b) => pulseIO.observe(b));
+document.querySelectorAll('a.btn-lg').forEach((b) => pulseIO.observe(b));
 
 // Hide sticky CTA while the pricing card is on screen
 const sticky = document.querySelector('.sticky-cta');
