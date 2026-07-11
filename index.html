@@ -308,16 +308,22 @@
 
     <!-- Video testimonials: real footage, loads only on click -->
     <div class="vt-grid">
-      <button class="vt-card" type="button" data-yt="V5ych2rxtnQ">
-        <span class="vt-thumb">
+      <div class="vt-card vt-live">
+        <div class="vt-thumb av-slot" data-autoplay="V5ych2rxtnQ">
           <img src="https://i.ytimg.com/vi/V5ych2rxtnQ/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/V5ych2rxtnQ/hqdefault.jpg'" loading="lazy" alt="Pat Flynn reviews Poppy AI">
           <span class="vt-playbtn" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
-        </span>
-        <span class="vt-meta">
+          <div class="av-wrap" hidden>
+            <div class="av-ctrl">
+              <button class="av-mute" type="button" aria-label="Unmute video"></button>
+              <button class="av-close" type="button" aria-label="Close video">&times;</button>
+            </div>
+          </div>
+        </div>
+        <div class="vt-meta">
           <strong>“Literally the ONLY AI tool creators need right now”</strong>
           <span>Pat Flynn · independent review</span>
-        </span>
-      </button>
+        </div>
+      </div>
       <button class="vt-card" type="button" data-yt="cRmoR5TVHv8">
         <span class="vt-thumb">
           <img src="https://i.ytimg.com/vi/cRmoR5TVHv8/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/cRmoR5TVHv8/hqdefault.jpg'" loading="lazy" alt="How Kevin made $75,000 with Poppy AI">
@@ -386,13 +392,19 @@
 <!-- ============ FOUNDER ============ -->
 <section class="founder">
   <div class="wrap founder-grid">
-    <button class="founder-video" type="button" data-yt="1EnkaMBquDo" aria-label="Watch the co-founder walk through Poppy AI">
+    <div class="founder-video av-slot" data-autoplay="1EnkaMBquDo" role="button" tabindex="0" aria-label="Watch the co-founder walk through Poppy AI">
       <img class="founder-poster" src="https://i.ytimg.com/vi/1EnkaMBquDo/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/1EnkaMBquDo/hqdefault.jpg'" loading="lazy" alt="">
       <span class="play-btn" aria-hidden="true">
         <svg viewBox="0 0 24 24" width="30" height="30"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
       </span>
       <span class="founder-video-tag">Watch the walkthrough</span>
-    </button>
+      <div class="av-wrap" hidden>
+        <div class="av-ctrl">
+          <button class="av-mute" type="button" aria-label="Unmute video"></button>
+          <button class="av-close" type="button" aria-label="Close video">&times;</button>
+        </div>
+      </div>
+    </div>
     <div class="founder-copy">
       <p class="eyebrow">A note from the co-founder</p>
       <blockquote>“We built Poppy because our own content team was drowning in tabs. Now 11,000+ creators use it every day. We move fast, and the product gets better every single week.”</blockquote>
