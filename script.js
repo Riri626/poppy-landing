@@ -18,9 +18,9 @@
     reel: 'studied your best reel’s cadence',
   };
   const HOOK =
-    'Hook #1: “I studied my competitor’s most viral content so you don’t have to — three beats make it work, and you can steal all of them.”';
+    'Hook #1: “I studied my competitor’s most viral content so you don’t have to. Three beats make it work, and you can steal all of them.”';
   const EMPTY_MSG =
-    'This board is empty. Tap a source above — I write better with receipts.';
+    'This board is empty. Tap a source above, I write better with receipts.';
 
   const active = new Set();
   let autoTimers = [];
@@ -59,7 +59,7 @@
     if (!active.size) { typeOut(EMPTY_MSG); return; }
     const order = ['video', 'pdf', 'voice', 'reel'].filter((k) => active.has(k));
     const doneList = order.map((k) => PARTS[k]).join(', ');
-    const msg = `Done — ${doneList}.\n${HOOK}\n✓ 5 hooks drafted in your voice · 11s`;
+    const msg = `Done. I ${doneList}.\n${HOOK}\n✓ 5 hooks drafted in your voice · 11s`;
     typeOut(msg, () => { genBtn.textContent = '↻ Run it again'; });
   };
 
@@ -95,112 +95,6 @@
   }
 })();
 
-// ============ Scroll-autoplay video + mini player ============
-// One featured video per section autoplays (muted) when scrolled into view.
-// Scroll past it and it docks to a corner mini player with mute/close.
-// Reaching the other section's video stops this one and starts that one.
-const stopLiveVideo = (() => {
-  const slots = [...document.querySelectorAll('.av-slot[data-autoplay]')];
-  if (!slots.length) return () => {};
-
-  const ICON_MUTED =
-    '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><path d="M16 9.5l5 5m0-5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>';
-  const ICON_SOUND =
-    '<svg viewBox="0 0 24 24" width="16" height="16"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><path d="M16 8a5 5 0 0 1 0 8M18.5 5.5a9 9 0 0 1 0 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>';
-
-  let current = null; // { slot, wrap, iframe, muted }
-
-  const cmd = (iframe, func) => {
-    try {
-      iframe.contentWindow.postMessage(
-        JSON.stringify({ event: 'command', func, args: [] }), '*'
-      );
-    } catch (e) { /* iframe not ready yet */ }
-  };
-
-  const stop = (dismiss) => {
-    if (!current) return;
-    current.iframe.remove();
-    current.wrap.classList.remove('docked');
-    current.wrap.hidden = true;
-    current.slot.classList.remove('playing');
-    if (dismiss) current.slot.dataset.dismissed = '1';
-    current = null;
-  };
-
-  const activate = (slot) => {
-    stop(false);
-    const wrap = slot.querySelector('.av-wrap');
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube-nocookie.com/embed/${slot.dataset.autoplay}?autoplay=1&mute=1&rel=0&playsinline=1&enablejsapi=1`;
-    iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
-    iframe.allowFullscreen = true;
-    iframe.title = 'Poppy AI video';
-    wrap.prepend(iframe);
-    wrap.hidden = false;
-    slot.classList.add('playing');
-    const muteBtn = wrap.querySelector('.av-mute');
-    muteBtn.innerHTML = ICON_MUTED;
-    muteBtn.setAttribute('aria-label', 'Unmute video');
-    current = { slot, wrap, iframe, muted: true };
-  };
-
-  slots.forEach((slot) => {
-    const wrap = slot.querySelector('.av-wrap');
-    wrap.querySelector('.av-mute').innerHTML = ICON_MUTED;
-
-    wrap.querySelector('.av-close').addEventListener('click', (e) => {
-      e.stopPropagation();
-      stop(true);
-    });
-    wrap.querySelector('.av-mute').addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (!current || current.slot !== slot) return;
-      cmd(current.iframe, current.muted ? 'unMute' : 'mute');
-      current.muted = !current.muted;
-      const btn = e.currentTarget;
-      btn.innerHTML = current.muted ? ICON_MUTED : ICON_SOUND;
-      btn.setAttribute('aria-label', current.muted ? 'Unmute video' : 'Mute video');
-    });
-
-    // Tap the thumbnail to (re)start, even after dismissing
-    slot.addEventListener('click', () => {
-      if (current && current.slot === slot) return;
-      delete slot.dataset.dismissed;
-      activate(slot);
-    });
-    slot.addEventListener('keydown', (e) => {
-      if ((e.key === 'Enter' || e.key === ' ') && slot.getAttribute('role') === 'button') {
-        e.preventDefault();
-        slot.click();
-      }
-    });
-  });
-
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((en) => {
-          const slot = en.target;
-          if (en.isIntersecting) {
-            if (current && current.slot === slot) {
-              current.wrap.classList.remove('docked');
-            } else if (!slot.dataset.dismissed) {
-              activate(slot);
-            }
-          } else if (current && current.slot === slot) {
-            current.wrap.classList.add('docked');
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-    slots.forEach((s) => io.observe(s));
-  }
-
-  return stop;
-})();
-
 // ============ Video lightbox ============
 // One iframe for every video on the page; nothing loads until a click.
 (() => {
@@ -209,7 +103,6 @@ const stopLiveVideo = (() => {
   if (!modal || !iframe) return;
 
   const open = (id) => {
-    stopLiveVideo(true); // don't fight the lightbox for audio/attention
     iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
     modal.hidden = false;
     document.body.style.overflow = 'hidden';
