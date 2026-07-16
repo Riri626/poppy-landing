@@ -232,6 +232,7 @@ mark{background:linear-gradient(transparent 55%, #ffd1e2 55%);color:inherit;padd
   color:#a89d8d;margin-bottom:7px;text-transform:uppercase;
 }
 .chip-row{display:flex;gap:7px;flex-wrap:wrap}
+.tag-icon{vertical-align:-1.5px;margin-right:1px}
 .chip{
   font-family:var(--sans);font-size:12px;font-weight:600;
   background:#fff;color:var(--ink-soft);
@@ -401,10 +402,7 @@ section{padding:88px 0}
 }
 .uses .section-title{color:var(--paper)}
 .uses-sub{color:rgba(250,246,239,.6);font-size:17px;margin-top:12px}
-.grad{
-  background:linear-gradient(92deg,#f8c0d2 5%,#f06a9b 40%,#8f9dff 95%);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
+.grad{color:#f8c0d2}
 .uses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
 .use{
   position:relative;

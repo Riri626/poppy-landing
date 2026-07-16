@@ -95,10 +95,10 @@
         <div class="board-toolbar">
           <span class="board-hint">This board is live. Tap a source:</span>
           <div class="chip-row" role="group" aria-label="Add sources to the demo board">
-            <button class="chip" type="button" data-node="video">▶ YouTube</button>
+            <button class="chip" type="button" data-node="video"><svg class="tag-icon" viewBox="0 0 24 24" width="11" height="11" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg> YouTube</button>
             <button class="chip" type="button" data-node="pdf">PDF</button>
-            <button class="chip" type="button" data-node="voice">🎙 Voice</button>
-            <button class="chip" type="button" data-node="reel">📱 Reel</button>
+            <button class="chip" type="button" data-node="voice"><svg class="tag-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3z" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0M12 19v2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg> Voice</button>
+            <button class="chip" type="button" data-node="reel"><svg class="tag-icon" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><rect x="6.5" y="2" width="11" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10.5 9.3v5.4l4.3-2.7z" fill="currentColor"/></svg> Reel</button>
           </div>
         </div>
         <svg class="canvas-lines" viewBox="0 0 460 460" preserveAspectRatio="none" aria-hidden="true">
@@ -108,7 +108,7 @@
           <path data-line="reel" d="M272 352 C 292 338, 308 330, 324 318" fill="none"/>
         </svg>
         <div class="node node-video" data-slot="video" aria-hidden="true">
-          <div class="node-tag">▶ YouTube</div>
+          <div class="node-tag"><svg class="tag-icon" viewBox="0 0 24 24" width="10" height="10" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg> YouTube</div>
           <div class="thumb"></div>
           <p>“How I hit 1M subs”, 42 min</p>
         </div>
@@ -117,11 +117,11 @@
           <p>competitor-teardown.pdf<br><span>38 pages, summarized</span></p>
         </div>
         <div class="node node-voice" data-slot="voice" aria-hidden="true">
-          <div class="node-tag tag-voice">🎙 Voice note</div>
+          <div class="node-tag tag-voice"><svg class="tag-icon" viewBox="0 0 24 24" width="10" height="10" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3z" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0M12 19v2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg> Voice note</div>
           <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         </div>
         <div class="node node-reel" data-slot="reel" aria-hidden="true">
-          <div class="node-tag tag-reel">📱 IG Reel</div>
+          <div class="node-tag tag-reel"><svg class="tag-icon" viewBox="0 0 24 24" width="10" height="10" aria-hidden="true"><rect x="6.5" y="2" width="11" height="20" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10.5 9.3v5.4l4.3-2.7z" fill="currentColor"/></svg> IG Reel</div>
           <p>Your best reel · 812k plays</p>
         </div>
         <div class="node node-chat">
@@ -131,7 +131,7 @@
           </div>
           <div class="chat-bubble user">Write me 5 hooks in my voice from what’s on this board</div>
           <div class="chat-bubble ai" id="ai-out" hidden><span class="typing-text" id="ai-text"></span></div>
-          <button class="gen-btn" id="gen-btn" type="button">✦ Generate 5 hooks</button>
+          <button class="gen-btn" id="gen-btn" type="button">Generate 5 hooks</button>
         </div>
         <div class="cursor cursor-a" aria-hidden="true"><svg viewBox="0 0 20 20" width="14" height="14"><path d="M2 1l6 16 2.5-6.5L17 8z" fill="#2547f4"/></svg><span>Sam</span></div>
         <div class="cursor cursor-b" aria-hidden="true"><svg viewBox="0 0 20 20" width="14" height="14"><path d="M2 1l6 16 2.5-6.5L17 8z" fill="#d95c8a"/></svg><span>You</span></div>
@@ -393,7 +393,7 @@
 <section class="founder">
   <div class="wrap founder-grid">
     <div class="founder-video av-slot" data-autoplay="1EnkaMBquDo" role="button" tabindex="0" aria-label="Watch the co-founder walk through Poppy AI">
-      <img class="founder-poster" src="https://i.ytimg.com/vi/1EnkaMBquDo/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/1EnkaMBquDo/hqdefault.jpg'" loading="lazy" alt="">
+      <img class="founder-poster" src="https://i.ytimg.com/vi/1EnkaMBquDo/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/1EnkaMBquDo/hqdefault.jpg'" loading="lazy" alt="Qazi, co-founder of Poppy AI, recording a walkthrough of the product">
       <span class="play-btn" aria-hidden="true">
         <svg viewBox="0 0 24 24" width="30" height="30"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
       </span>
